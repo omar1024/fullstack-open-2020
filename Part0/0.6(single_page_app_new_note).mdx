@@ -1,0 +1,19 @@
+note left of browser
+Form submission
+from clientside
+end note
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+
+note over browser:
+browser sends json 
+data to server
+end note
+
+server-->browser: Status Code 201, Created file
+
+note over browser:
+browser executes the event handler
+that renders notes to display by appending
+new data
+end note
