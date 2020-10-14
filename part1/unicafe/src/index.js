@@ -54,7 +54,7 @@ const App = () => {
     const percent = (x/total)*100;
     return percent;
   };
-
+  const ratio=()=>{if(total===0) return 0; return(amount/total);}
 
   return (
     <div>
@@ -67,7 +67,7 @@ const App = () => {
       <Statistic text="neutral" value={neutral} />
       <Statistic text="bad" value={bad} />
       <Statistic text="all" value={total} />
-      <Statistic text="average" value={percent(amount,total)}/>
+      <Statistic text="average" value={ratio(amount,total)}/>
       <Statistic text="positive" value={percent(good,total)}/>
     </div>
   )
