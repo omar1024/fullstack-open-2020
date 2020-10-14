@@ -42,8 +42,19 @@ const App = () => {
         break;
       default:
         break;
+    };
+  };
+  const total = good+bad+neutral;
+  const amount = good-bad;
+
+  const percent =(x,total)=>{
+    if(total===0){
+      return 0;
     }
-  }
+    const percent = (x/total)*100;
+    return percent;
+  };
+
 
   return (
     <div>
@@ -55,9 +66,9 @@ const App = () => {
       <Statistic text="good" value={good} />
       <Statistic text="neutral" value={neutral} />
       <Statistic text="bad" value={bad} />
-
-
-
+      <Statistic text="all" value={total} />
+      <Statistic text="average" value={percent(amount,total)}/>
+      <Statistic text="positive" value={percent(good,total)}/>
     </div>
   )
 }
