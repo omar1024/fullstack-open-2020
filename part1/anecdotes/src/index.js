@@ -1,14 +1,24 @@
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+const Button = (props)=> <button onClick={props.handleclick}>{props.text}</button>
 
 const App = (props) => {
   const [selected, setSelected] = useState(0)
+  const handleclickbutton = ()=>{
+    if(selected>=anecdotes.length-1){
+      selected=selected%(anecdotes.length);
+    }
+    setSelected(selected+1);
+  }
 
   return (
     <div>
-      {props.anecdotes[selected]}
+      <p>{props.anecdotes[selected]}</p>
+      <Button text="next anecdote" handleclick={()=>handleclickbutton()} />
     </div>
-  )
+    
+  );
 }
 
 const anecdotes = [
