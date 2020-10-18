@@ -4,20 +4,24 @@ import ReactDOM from 'react-dom'
 const Button = (props)=> <button onClick={props.handleclick}>{props.text}</button>
 
 const App = (props) => {
-  const [selected, setSelected] = useState(0)
-  const handleclickbutton = ()=>{
-    if(selected>=anecdotes.length-1){
-      selected=selected%(anecdotes.length);
-    }
-    setSelected(selected+1);
-  }
+  const [selected, setSelected] = useState(0);
+  const randomindex = (len)=>{
+    return Math.floor(Math.random()*len);
+};
+  const newindex=()=>{
+    let randomidx;
+    do {
+      randomidx = randomindex(anecdotes.length)
+    } while (randomidx === selected);
+    setSelected(randomidx);
+}  
+
 
   return (
     <div>
       <p>{props.anecdotes[selected]}</p>
-      <Button text="next anecdote" handleclick={()=>handleclickbutton()} />
-    </div>
-    
+      <Button text="next anecdote" handleclick={()=>newindex()} />
+    </div> 
   );
 }
 
