@@ -1,10 +1,22 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const Button = (props)=> <button onClick={props.handleclick}>{props.text}</button>
+const Button = (props)=> <button onClick={props.handleclick}>{props.text}</button> ;
+const Anecdotes = (props)=>{
+  return (
+    <div>
+      {props.anecdote}
+      <br />
+      has {props.votes} votes
+    </div>
+  );
+};
+
 
 const App = (props) => {
   const [selected, setSelected] = useState(0);
+  const [votes, setvotes] = useState(new Array(anecdotes.length).fill(0));
+
   const randomindex = (len)=>{
     return Math.floor(Math.random()*len);
 };
@@ -15,12 +27,31 @@ const App = (props) => {
     } while (randomidx === selected);
     setSelected(randomidx);
 }  
+  const incvote = ()=>{
+  const newvotes = [...votes];
+  newvotes[selected]+=1;
+  setvotes(newvotes);
+}
 
+  const handleonclicks=(type)=>{
+  switch(type){
+    case "next":
+      newindex();
+      break;
+    case "vote":
+      incvote();
+      break;
+    default:
+      break;
+  }
+}
 
   return (
     <div>
-      <p>{props.anecdotes[selected]}</p>
-      <Button text="next anecdote" handleclick={()=>newindex()} />
+      <Anecdotes anecdote={anecdotes[selected]} votes={votes[selected]} />
+      <Button text="vote" handleclick={()=>handleonclicks("vote")} />
+      <Button text="next anecdote" handleclick={()=>handleonclicks("next")} />
+
     </div> 
   );
 }
