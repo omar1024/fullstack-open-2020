@@ -8,6 +8,8 @@ const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
+  const [search, setSearch] = useState("");
+  const [filerPerson, setFilterPerson] = useState(persons)
 
 useEffect(()=>{
   axios.get("http://localhost:3001/persons")
@@ -16,9 +18,12 @@ useEffect(()=>{
   })
 },[])
 
-  const personsList = persons.map(person => {
+  const personsList = search.trim() === "" ? persons.map(person => {
     return <Person key={person.id} name={person.name}  phoneNumber={person.number}/>;
-  });
+  }) : filerPerson.map(person => {
+    return <Person key={person.id} name={person.name}  phoneNumber={person.number}/>;
+
+  }); 
 
   const handleChange = event => {
     setNewName(event.target.value);
@@ -26,7 +31,11 @@ useEffect(()=>{
   const handleChanger = event => {
     setNewNumber(event.target.value);
   };
-
+  const searchFilter = event => {
+    setSearch(event.target.value);
+    setFilterPerson(persons.filter((person) =>
+    (person.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1)))
+  };
   const handleSubmit = event => {
     event.preventDefault();
 
@@ -44,6 +53,13 @@ useEffect(()=>{
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+          filter show with{" "}
+          <input onChange={event => searchFilter(event)} value={search} />
+        </div>
+        <br/>
+        <h2>add new</h2>
+        <br/>
       <form onSubmit={event => handleSubmit(event)}>
         <div>
           name:{" "}
