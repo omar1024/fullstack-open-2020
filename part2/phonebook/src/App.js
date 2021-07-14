@@ -37,7 +37,7 @@ useEffect(()=>{
     setFilterPerson(persons.filter((person) =>
     (person.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1)))
   };
-  const handleSubmit = event => {
+  const addPerson = event => {
     event.preventDefault();
 
     const person = {
@@ -65,7 +65,7 @@ useEffect(()=>{
         <br/>
         <h2>add new</h2>
         <br/>
-      <PersonForm addPerson = {handleSubmit} data = {data} />
+      <PersonForm addPerson = {addPerson} data = {data} />
       <h2>Numbers</h2>
       <SearchResults list = {personsList}/>
     </div>
