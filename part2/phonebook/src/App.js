@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Person from './components/Person'
+import PersonForm from './components/PersonForm'
+import SearchResults from './components/Filter'
+import Filter from './components/SearchInput'
 import axios from "axios"
 
 
@@ -18,9 +21,7 @@ useEffect(()=>{
   })
 },[])
 
-  const personsList = search.trim() === "" ? persons.map(person => {
-    return <Person key={person.id} name={person.name}  phoneNumber={person.number}/>;
-  }) : filerPerson.map(person => {
+  const personsList =filerPerson.map(person => {
     return <Person key={person.id} name={person.name}  phoneNumber={person.number}/>;
 
   }); 
@@ -50,31 +51,23 @@ useEffect(()=>{
     setNewNumber("");
   };
 
+  const data = {
+    newName,
+    newNumber,
+    handleChange,
+    handleChanger
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-          filter show with{" "}
-          <input onChange={event => searchFilter(event)} value={search} />
-        </div>
+        <Filter onChange = {searchFilter} value = {search} />
         <br/>
         <h2>add new</h2>
         <br/>
-      <form onSubmit={event => handleSubmit(event)}>
-        <div>
-          name:{" "}
-          <input onChange={event => handleChange(event)} value={newName} />
-        </div>
-        <div>
-          phoneNumber:{" "}
-          <input onChange={event => handleChanger(event)} value={newNumber} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm addPerson = {handleSubmit} data = {data} />
       <h2>Numbers</h2>
-      {personsList}
+      <SearchResults list = {personsList}/>
     </div>
   );
 };
