@@ -1,8 +1,8 @@
 import React from 'react';
 
-const CountryInfo = ({name}) => {
+const CountryInfo = ({id , name}) => {
     return(
-        <div>
+        <div id = {id}>
             <p>{name}</p>
         </div>
     )
