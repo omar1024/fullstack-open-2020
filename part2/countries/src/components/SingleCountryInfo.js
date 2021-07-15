@@ -1,7 +1,12 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
+import axios from "axios"
+
+
+const api_key = process.env.REACT_APP_WEATHER
 
 
 const SingleCountry = ({ name, capital, population, languages,flag}) =>{
+    console.log("hi")
     return (
         <div>
             <h1>
@@ -15,9 +20,11 @@ const SingleCountry = ({ name, capital, population, languages,flag}) =>{
           </ul>
           <img
             src = {flag}
-            alt = ""
+            alt = "Flag missing"
           />
-
+          <h2>Weather in {capital}</h2>
+          <p><span><strong>Temperature:</strong> </span></p>
+          <p><span><strong>Wind:</strong> ""</span></p>
         </div>
     );
 }
