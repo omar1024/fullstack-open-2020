@@ -28,15 +28,7 @@ const App = () => {
     }else if(filterCountry.length === 1){
       return (
         <div>
-          <SingleCountry name={filterCountry[0].name}  capital = {filterCountry[0].capital} population = {filterCountry[0].population} />
-          <h2>Languages</h2>
-          <ul>
-            {filterCountry[0].languages.map(language => <li key={language.name}>{language.name}</li>)}
-          </ul>
-          <img
-            src = {filterCountry[0].flag}
-            alt = ""
-          />
+          <SingleCountry name={filterCountry[0].name} languages = {filterCountry[0].languages} capital = {filterCountry[0].capital} population = {filterCountry[0].population} flag = {filterCountry[0].flag} />
         </div>
       )}
     else{
