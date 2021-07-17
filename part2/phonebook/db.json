@@ -1,29 +1,14 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": 1
-    },
-    {
-      "name": "omar",
-      "number": "1234567",
-      "id": 2
-    },
-    {
-      "name": "omar",
-      "number": "121231231",
-      "id": 3
-    },
-    {
-      "name": "omar",
-      "number": "wedasdas",
-      "id": 4
-    },
-    {
       "name": "farooq1",
       "number": "1234342",
       "id": 5
+    },
+    {
+      "name": "imran",
+      "number": "32123213",
+      "id": 6
     }
   ]
 }

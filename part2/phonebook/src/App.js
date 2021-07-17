@@ -3,6 +3,7 @@ import phoneNumberService from './components/services/PhoneNumber'
 import InputForm from './components/InputForm'
 import SearchFilter from './components/SearchFilter'
 import ContactList from "./components/ContactList"
+import Notification from "./components/Notification"
 
 const App = () => {
   const [contacts, setContacts] = useState([])
@@ -72,6 +73,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification notification={notification}></Notification>
       <SearchFilter value = {newFilter}  onChange={handleFilterChange} />
       <h2>Add new</h2>
       <InputForm
