@@ -1,74 +1,61 @@
 import React, { useEffect, useState } from "react";
-import Person from './components/Person'
-import PersonForm from './components/PersonForm'
-import SearchResults from './components/Filter'
-import Filter from './components/SearchInput'
-import axios from "axios"
-
-
+import phoneNumberService from './components/services/PhoneNumber'
+import InputForm from './components/InputForm'
+import SearchFilter from './components/SearchFilter'
+import ContactList from "./components/ContactList"
 
 const App = () => {
-  const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState("");
-  const [newNumber, setNewNumber] = useState("");
-  const [search, setSearch] = useState("");
-  const [filerPerson, setFilterPerson] = useState(persons)
+  const [contacts, setContacts] = useState([])
+   const [newName, setNewName] = useState('')
+   const [newNumber, setNewNumber] = useState('')
+   const [newFilter, setNewFilter] = useState('')
+ 
+   const handleFilterChange = (event) => { setNewFilter(event.target.value) }
+   const handleNameChange = (event) => { setNewName(event.target.value) }
+   const handleNumberChange = (event) => { setNewNumber(event.target.value) }
+ 
+  const getContacts = () =>{phoneNumberService.getAll().then(response => setContacts(response.data))}
 
-useEffect(()=>{
-  axios.get("http://localhost:3001/persons")
-  .then(response => {
-    setPersons(response.data);
-  })
-},[])
+  useEffect(getContacts,[])
 
-  const personsList =filerPerson.map(person => {
-    return <Person key={person.id} name={person.name}  phoneNumber={person.number}/>;
-
-  }); 
-
-  const handleChange = event => {
-    setNewName(event.target.value);
-  };
-  const handleChanger = event => {
-    setNewNumber(event.target.value);
-  };
-  const searchFilter = event => {
-    setSearch(event.target.value);
-    setFilterPerson(persons.filter((person) =>
-    (person.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1)))
-  };
-  const addPerson = event => {
-    event.preventDefault();
-
-    const person = {
-      name: newName,
-      number : newNumber,
-      id : persons.length+1
-    };
-
-    setPersons([...persons].concat(person));
-    setNewName("");
-    setNewNumber("");
-  };
-
-  const data = {
-    newName,
-    newNumber,
-    handleChange,
-    handleChanger
+  const addContact = (event)=>{
+    event.preventDefault()
+    const newContact = {name : newName, number : newNumber}
+    phoneNumberService.create(newContact).then(response => {
+      setContacts(contacts.concat(response.data))
+    })
+    setNewName("")
+    setNewNumber("")
   }
-
+  const deleteContact = (event)=>{
+    const singleContact = event.target
+    const confirm = window.confirm(`Are you sure you want to delete ${singleContact.name} ?`)
+    const sameName = contacts.filter(contact => contact.name === newName)
+    if (sameName.length > 0) {
+      const msg = `Contact ${newName} is already in the phonebook. Do you want to replace the old contact?`
+      const confirm = window.confirm(msg)
+      if (confirm) {
+        phoneNumberService.update(sameName[0].id, singleContact).then(getContacts)
+      }
+    } else if(confirm !== true){
+      phoneNumberService.create(singleContact).then(
+        response => {setContacts(contacts.concat(response.data))}
+      )
+    }
+}
   return (
     <div>
       <h2>Phonebook</h2>
-        <Filter onChange = {searchFilter} value = {search} />
-        <br/>
-        <h2>add new</h2>
-        <br/>
-      <PersonForm addPerson = {addPerson} data = {data} />
+      <SearchFilter value = {newFilter}  onChange={handleFilterChange} />
+      <h2>Add new</h2>
+      <InputForm
+        addObject={addContact} newName={newName} handleNameChange={handleNameChange}
+        newNumber={newNumber} handleNumberChange={handleNumberChange}>
+      </InputForm>
       <h2>Numbers</h2>
-      <SearchResults list = {personsList}/>
-    </div>
+      <ContactList contacts = {contacts} filter = {newFilter} deleteFun = {deleteContact} />
+
+      </div>
   );
 };
 
