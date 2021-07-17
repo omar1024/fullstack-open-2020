@@ -9,6 +9,8 @@ const App = () => {
    const [newName, setNewName] = useState('')
    const [newNumber, setNewNumber] = useState('')
    const [newFilter, setNewFilter] = useState('')
+   const [notification, setNotification] = useState(null)
+
  
    const handleFilterChange = (event) => { setNewFilter(event.target.value) }
    const handleNameChange = (event) => { setNewName(event.target.value) }
@@ -18,31 +20,55 @@ const App = () => {
 
   useEffect(getContacts,[])
 
+  const messageDisplayTime = 3000 // ms
+  const standardError = {type: 'errorNotification', message: 'Operation failed. Refresh your browser.'}
+  const deleteNotificationFunction = (name) => {
+    setNotification({type: 'deleteNotification', message: `Deleted ${name} from contacts!`})
+    setTimeout(() => {setNotification(null)}, messageDisplayTime)
+  }
+
+  const updateNotificationFunction = (name) => {
+    setNotification({type: 'updateNotification', message: `Updated ${name} in contacts!`})
+    setTimeout(() => {setNotification(null)}, messageDisplayTime)
+  }
+
+  const addNotificationFunction = (name) => {
+    setNotification({type: 'addNotification', message: `Added ${name} to contacts!`})
+    setTimeout(() => {setNotification(null)}, messageDisplayTime)
+  }
+
+  const errorNotificationFunction = () => {
+    setNotification(standardError)
+    setTimeout(() => {setNotification(null)}, messageDisplayTime)
+  }
+
   const addContact = (event)=>{
     event.preventDefault()
-    const newContact = {name : newName, number : newNumber}
-    phoneNumberService.create(newContact).then(response => {
-      setContacts(contacts.concat(response.data))
-    })
-    setNewName("")
-    setNewNumber("")
-  }
-  const deleteContact = (event)=>{
-    const singleContact = event.target
-    const confirm = window.confirm(`Are you sure you want to delete ${singleContact.name} ?`)
+    const contactObject = { name: newName, number: newNumber }
     const sameName = contacts.filter(contact => contact.name === newName)
     if (sameName.length > 0) {
       const msg = `Contact ${newName} is already in the phonebook. Do you want to replace the old contact?`
       const confirm = window.confirm(msg)
       if (confirm) {
-        phoneNumberService.update(sameName[0].id, singleContact).then(getContacts)
+        phoneNumberService.update(sameName[0].id, contactObject).then(getContacts)
+        .then(() => {updateNotificationFunction(newName)}).catch(error => {errorNotificationFunction()})
       }
-    } else if(confirm !== true){
-      phoneNumberService.create(singleContact).then(
+    } else {
+      phoneNumberService.create(contactObject).then(
         response => {setContacts(contacts.concat(response.data))}
-      )
+      ).then(() => {addNotificationFunction(newName)})
+      .catch(error => {errorNotificationFunction()})
     }
-}
+  }
+  const deleteContact = (event) => {
+    const button = event.target
+    const confirm = window.confirm(`Delete ${button.name}?`);
+    if (confirm) {
+      phoneNumberService.destroy(button.id).then(getContacts)
+      .then(() => {deleteNotificationFunction(button.name)})
+      .catch(error => {errorNotificationFunction()})
+    }
+  }
   return (
     <div>
       <h2>Phonebook</h2>
