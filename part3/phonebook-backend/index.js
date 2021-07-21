@@ -1,6 +1,18 @@
 import express, { request, response } from 'express'
+import morgan from 'morgan'
 const app = express()
 app.use(express.json())
+
+morgan.token('post', (request, response) => {
+  if (request.method === 'POST')
+      return JSON.stringify(request.body)
+  else
+      return ''
+})
+
+morgan.format('postFormat',':method :url :status :res[content-length] - :response-time ms :post')
+
+app.use(morgan('postFormat'))
 
 let persons = [
   { 
@@ -24,6 +36,7 @@ let persons = [
     "number": "39-23-6423122"
   }
 ]
+
 
 app.get('/', (request, response) => {
   response.send('<h1>dummy checks</h1>')
