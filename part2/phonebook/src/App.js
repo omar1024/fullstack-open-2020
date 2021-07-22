@@ -59,6 +59,8 @@ const App = () => {
         response => {setContacts(contacts.concat(response.data))}
       ).then(() => {addNotificationFunction(newName)})
       .catch(error => {errorNotificationFunction()})
+      setNewName("")
+      setNewNumber("")
     }
   }
   const deleteContact = (event) => {

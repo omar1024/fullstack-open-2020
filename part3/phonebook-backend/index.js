@@ -1,7 +1,10 @@
 import express, { request, response } from 'express'
 import morgan from 'morgan'
+import cors from 'cors'
 const app = express()
 app.use(express.json())
+app.use(cors())
+
 
 morgan.token('post', (request, response) => {
   if (request.method === 'POST')
